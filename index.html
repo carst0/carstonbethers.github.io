@@ -59,7 +59,24 @@
             background: #333;
             color: white;
             text-align: center;
+        }
+
+        .flip-letter .top,
+        .flip-letter .flip-top {
             line-height: 1.5em;
+            bottom: 0;
+        }
+
+        .flip-letter .bottom,
+        .flip-letter .flip-bottom {
+            line-height: 0;
+            top: 0;
+        }
+
+        .flip-letter .bottom span,
+        .flip-letter .flip-bottom span {
+            display: block;
+            margin-top: -0.75em;
         }
 
         /* Colorful theme variations */
@@ -152,11 +169,11 @@
     </style>
 </head>
 <body>
-    <div class="flip-board" id="flipBoard"></div>
+    <div class="flip-board" id="flipBoard" onclick="handleClick()"></div>
     <button class="theme-toggle" onclick="toggleTheme()">Toggle Colors</button>
 
     <script>
-        const phrases = [" CARSTON BETHERS ", "I LIKE CARS A TON!"]; // Added spaces for centering first phrase
+        const phrases = [" CARSTON BETHERS ", "I LIKE CARS A TON!"];
         let currentPhraseIndex = 0;
         let isColorful = false;
         
@@ -172,7 +189,9 @@
                 
                 const bottom = document.createElement('div');
                 bottom.className = 'bottom';
-                bottom.textContent = char;
+                const bottomSpan = document.createElement('span');
+                bottomSpan.textContent = char;
+                bottom.appendChild(bottomSpan);
                 
                 const flipTop = document.createElement('div');
                 flipTop.className = 'flip-top';
@@ -180,7 +199,9 @@
                 
                 const flipBottom = document.createElement('div');
                 flipBottom.className = 'flip-bottom';
-                flipBottom.textContent = char;
+                const flipBottomSpan = document.createElement('span');
+                flipBottomSpan.textContent = char;
+                flipBottom.appendChild(flipBottomSpan);
                 
                 letter.appendChild(top);
                 letter.appendChild(bottom);
@@ -214,9 +235,9 @@
                         // Update the character after flip animation
                         setTimeout(() => {
                             letter.querySelector('.top').textContent = nextChar;
-                            letter.querySelector('.bottom').textContent = nextChar;
+                            letter.querySelector('.bottom span').textContent = nextChar;
                             letter.querySelector('.flip-top').textContent = nextChar;
-                            letter.querySelector('.flip-bottom').textContent = nextChar;
+                            letter.querySelector('.flip-bottom span').textContent = nextChar;
                             letter.classList.remove('flipping');
                         }, 300);
                     }

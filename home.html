@@ -52,42 +52,24 @@
             background: #333;
             color: white;
             text-align: center;
-            line-height: 1.5em;
         }
 
-        .flip-letter .top {
-            background: #444;
-            border-top-left-radius: 3px;
-            border-top-right-radius: 3px;
-            border-bottom: 1px solid #000;
-        }
-
-        .flip-letter .bottom {
-            bottom: 0;
-            background: #333;
-            border-bottom-left-radius: 3px;
-            border-bottom-right-radius: 3px;
-            line-height: 0;
-        }
-
-        .flip-letter .flip-top,
-        .flip-letter .flip-bottom {
-            transition: all 0.3s ease;
-            transform-origin: bottom;
-            backface-visibility: hidden;
-        }
-
+        .flip-letter .top,
         .flip-letter .flip-top {
-            background: #444;
-            transform-origin: bottom;
-            z-index: 2;
+            line-height: 1.5em;
+            bottom: 0;
         }
 
+        .flip-letter .bottom,
         .flip-letter .flip-bottom {
-            background: #333;
-            transform-origin: top;
-            z-index: 1;
-            top: 50%;
+            line-height: 0;
+            top: 0;
+        }
+
+        .flip-letter .bottom span,
+        .flip-letter .flip-bottom span {
+            display: block;
+            margin-top: -0.75em;
         }
 
         .flip-letter.flipping .flip-top {
@@ -222,7 +204,9 @@
                 
                 const bottom = document.createElement('div');
                 bottom.className = 'bottom';
-                bottom.textContent = char;
+                const bottomSpan = document.createElement('span');
+                bottomSpan.textContent = char;
+                bottom.appendChild(bottomSpan);
                 
                 const flipTop = document.createElement('div');
                 flipTop.className = 'flip-top';
@@ -230,7 +214,9 @@
                 
                 const flipBottom = document.createElement('div');
                 flipBottom.className = 'flip-bottom';
-                flipBottom.textContent = char;
+                const flipBottomSpan = document.createElement('span');
+                flipBottomSpan.textContent = char;
+                flipBottom.appendChild(flipBottomSpan);
                 
                 letter.appendChild(top);
                 letter.appendChild(bottom);
@@ -264,9 +250,9 @@
                         // Update the character after flip animation
                         setTimeout(() => {
                             letter.querySelector('.top').textContent = nextChar;
-                            letter.querySelector('.bottom').textContent = nextChar;
+                            letter.querySelector('.bottom span').textContent = nextChar;
                             letter.querySelector('.flip-top').textContent = nextChar;
-                            letter.querySelector('.flip-bottom').textContent = nextChar;
+                            letter.querySelector('.flip-bottom span').textContent = nextChar;
                             letter.classList.remove('flipping');
                         }, 300);
                     }

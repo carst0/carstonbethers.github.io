@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carston Bethers - Home</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 2rem;
+            background-color: black;
+            min-height: 100vh;
+            font-family: 'Courier New', Courier, monospace;
+            color: white;
+            overflow-x: hidden;
+        }
+
+        header {
+            margin-bottom: 4rem;
+        }
+
+        h1 {
+            font-size: 2rem;
+            letter-spacing: 2px;
+            margin-bottom: 0.5rem;
+        }
+
+        nav {
+            margin-top: 3rem;
+        }
+
+        .menu-item {
+            display: block;
+            margin: 1rem 0;
+            color: white;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .menu-item:hover {
+            color: #666;
+            padding-left: 1rem;
+        }
+
+        .menu-item::before {
+            content: "> ";
+            color: #666;
+        }
+
+        .snoopy-container {
+            position: fixed;
+            bottom: 20%;
+            display: flex;
+            align-items: center;
+            transform: translateX(-100%);
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        .snoopy-container.running {
+            animation: runAcross 4s linear forwards;
+        }
+
+        .snoopy {
+            width: 60px;
+            height: 60px;
+            background: white;
+            mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M30,70 Q35,60 40,70 Q45,60 50,70 L60,70 Q65,60 70,70 L75,65 Q80,60 80,65 L80,75 L20,75 L20,65 Q20,60 25,65 L30,70" /><circle cx="60" cy="40" r="20" /><circle cx="65" cy="35" r="5" fill="black" /><path d="M45,45 Q60,55 75,45" fill="none" stroke="black" stroke-width="2" /></svg>') center/contain;
+            -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M30,70 Q35,60 40,70 Q45,60 50,70 L60,70 Q65,60 70,70 L75,65 Q80,60 80,65 L80,75 L20,75 L20,65 Q20,60 25,65 L30,70" /><circle cx="60" cy="40" r="20" /><circle cx="65" cy="35" r="5" fill="black" /><path d="M45,45 Q60,55 75,45" fill="none" stroke="black" stroke-width="2" /></svg>') center/contain;
+            animation: bounce 0.5s infinite alternate;
+        }
+
+        .speech-bubble {
+            background: white;
+            color: black;
+            padding: 10px 15px;
+            border-radius: 20px;
+            margin-left: 15px;
+            font-size: 0.9rem;
+            position: relative;
+        }
+
+        .speech-bubble::before {
+            content: '';
+            position: absolute;
+            left: -10px;
+            top: 50%;
+            transform: translateY(-50%);
+            border-right: 10px solid white;
+            border-top: 10px solid transparent;
+            border-bottom: 10px solid transparent;
+        }
+
+        @keyframes runAcross {
+            0% {
+                transform: translateX(-100%);
+                opacity: 1;
+            }
+            80% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(100vw);
+                opacity: 0;
+            }
+        }
+
+        @keyframes bounce {
+            from {
+                transform: translateY(0);
+            }
+            to {
+                transform: translateY(-10px);
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>CARSTON BETHERS</h1>
+    </header>
+
+    <nav>
+        <a href="http://localhost:8000/blog.html" class="menu-item">BLOG</a>
+        <a href="http://localhost:8000/cars.html" class="menu-item">CARS</a>
+        <a href="http://localhost:8000/projects.html" class="menu-item">PROJECTS</a>
+        <a href="http://localhost:8000/food.html" class="menu-item">FOOD</a>
+    </nav>
+
+    <div class="snoopy-container">
+        <div class="snoopy"></div>
+        <div class="speech-bubble">What could you do in 14 seconds?</div>
+    </div>
+
+    <script>
+        let cursorTimer;
+        let lastX = 0;
+        let lastY = 0;
+        const IDLE_TIME = 14000; // 14 seconds
+
+        function resetTimer() {
+            clearTimeout(cursorTimer);
+            cursorTimer = setTimeout(triggerSnoopy, IDLE_TIME);
+        }
+
+        function triggerSnoopy() {
+            const snoopyContainer = document.querySelector('.snoopy-container');
+            snoopyContainer.classList.add('running');
+            
+            // Reset the animation after it completes
+            setTimeout(() => {
+                snoopyContainer.classList.remove('running');
+            }, 4000);
+        }
+
+        document.addEventListener('mousemove', (e) => {
+            // Only reset timer if cursor has moved more than 5 pixels
+            if (Math.abs(e.clientX - lastX) > 5 || Math.abs(e.clientY - lastY) > 5) {
+                lastX = e.clientX;
+                lastY = e.clientY;
+                resetTimer();
+            }
+        });
+
+        // Initial timer start
+        resetTimer();
+    </script>
+</body>
+</html> 

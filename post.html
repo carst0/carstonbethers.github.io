@@ -1,0 +1,358 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carston Bethers - Blog Post</title>
+    <!-- Add marked.js for markdown parsing -->
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+    <!-- Add highlight.js for code syntax highlighting -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <style>
+        :root {
+            --bg-color: #000000;
+            --text-color: #ffffff;
+            --accent-color: #666666;
+            --hover-color: #888888;
+            --border-color: #333333;
+        }
+
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            min-height: 100vh;
+            font-family: 'Courier New', Courier, monospace;
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        header {
+            margin-bottom: 4rem;
+            position: relative;
+        }
+
+        .back-link {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            display: inline-block;
+            transition: color 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: var(--text-color);
+        }
+
+        .back-link::before {
+            content: "< ";
+            color: var(--accent-color);
+        }
+
+        .post-title {
+            font-size: 2.5rem;
+            margin: 2rem 0;
+            letter-spacing: 2px;
+        }
+
+        .post-meta {
+            display: flex;
+            gap: 1.5rem;
+            color: var(--accent-color);
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+
+        .reading-time {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+        }
+
+        .reading-time::before {
+            content: "⏱";
+            font-size: 0.8rem;
+        }
+
+        .post-tags {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .post-tag {
+            background: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--accent-color);
+            padding: 0.25rem 0.75rem;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        .progress-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 2px;
+            background: var(--border-color);
+            z-index: 1000;
+        }
+
+        .progress-bar {
+            height: 100%;
+            background: var(--text-color);
+            width: 0%;
+            transition: width 0.1s ease;
+        }
+
+        .post-content {
+            margin-top: 3rem;
+        }
+
+        /* Markdown content styling */
+        .post-content h1,
+        .post-content h2,
+        .post-content h3,
+        .post-content h4,
+        .post-content h5,
+        .post-content h6 {
+            margin-top: 2em;
+            margin-bottom: 1em;
+        }
+
+        .post-content p {
+            margin: 1.5em 0;
+        }
+
+        .post-content code {
+            background: var(--border-color);
+            padding: 0.2em 0.4em;
+            border-radius: 3px;
+            font-size: 0.9em;
+        }
+
+        .post-content pre {
+            background: var(--border-color);
+            padding: 1em;
+            border-radius: 5px;
+            overflow-x: auto;
+        }
+
+        .post-content pre code {
+            background: none;
+            padding: 0;
+        }
+
+        .post-content blockquote {
+            border-left: 3px solid var(--accent-color);
+            margin: 1.5em 0;
+            padding-left: 1em;
+            font-style: italic;
+        }
+
+        .post-content img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            margin: 2em auto;
+        }
+
+        .post-content a {
+            color: var(--text-color);
+            text-decoration: underline;
+            text-decoration-color: var(--accent-color);
+            transition: all 0.3s ease;
+        }
+
+        .post-content a:hover {
+            text-decoration-color: var(--text-color);
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 1rem;
+            }
+
+            .post-title {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="progress-container">
+        <div class="progress-bar" id="progressBar"></div>
+    </div>
+
+    <div class="container">
+        <header>
+            <a href="blog.html" class="back-link">Back to Blog</a>
+            <h1 class="post-title" id="title">Loading...</h1>
+            <div class="post-meta">
+                <span id="date"></span>
+                <span class="reading-time" id="readingTime"></span>
+                <div class="post-tags" id="tags"></div>
+            </div>
+        </header>
+
+        <article class="post-content" id="content"></article>
+    </div>
+
+    <script>
+        // Function to parse frontmatter
+        function parseFrontmatter(content) {
+            try {
+                // Normalize line endings
+                content = content.replace(/\r\n/g, '\n');
+                
+                // More detailed regex for frontmatter
+                const match = content.match(/^---[\r\n]([\s\S]*?)[\r\n]---/);
+                
+                if (!match) {
+                    console.warn('No frontmatter found. Content starts with:', content.substring(0, 100));
+                    return null;
+                }
+                
+                const frontmatter = {};
+                const lines = match[1].split(/\r?\n/);
+                
+                for (const line of lines) {
+                    // Skip empty lines
+                    if (!line.trim()) continue;
+                    
+                    // Split on first colon only
+                    const colonIndex = line.indexOf(':');
+                    if (colonIndex === -1) {
+                        console.warn('Invalid frontmatter line:', line);
+                        continue;
+                    }
+                    
+                    const key = line.slice(0, colonIndex).trim();
+                    let value = line.slice(colonIndex + 1).trim();
+                    
+                    // Handle tags special case
+                    if (key === 'tags') {
+                        // Remove brackets and split by commas
+                        value = value.replace(/[\[\]]/g, '')
+                            .split(',')
+                            .map(tag => tag.trim())
+                            .filter(tag => tag); // Remove empty tags
+                    }
+                    
+                    frontmatter[key] = value;
+                }
+                
+                // Validate required fields
+                const requiredFields = ['title', 'date', 'preview', 'tags'];
+                const missingFields = requiredFields.filter(field => !frontmatter[field]);
+                
+                if (missingFields.length > 0) {
+                    console.warn(`Missing required frontmatter fields: ${missingFields.join(', ')} in frontmatter:`, frontmatter);
+                    return null;
+                }
+                
+                console.log('Successfully parsed frontmatter:', frontmatter);
+                return frontmatter;
+            } catch (error) {
+                console.error('Error parsing frontmatter:', error);
+                return null;
+            }
+        }
+
+        // Function to calculate reading time
+        function calculateReadingTime(text) {
+            const wordsPerMinute = 200;
+            const words = text.trim().split(/\s+/).length;
+            return Math.ceil(words / wordsPerMinute);
+        }
+
+        // Function to update progress bar
+        function updateProgressBar() {
+            const winScroll = document.body.scrollTop || document.documentElement.scrollTop;
+            const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+            const scrolled = (winScroll / height) * 100;
+            document.getElementById('progressBar').style.width = scrolled + '%';
+        }
+
+        // Load and display the blog post
+        async function loadBlogPost() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const postId = urlParams.get('id');
+            
+            if (!postId) {
+                window.location.href = 'blog.html';
+                return;
+            }
+
+            try {
+                const response = await fetch(`http://localhost:8000/Blog_posts/${postId}`);
+                const markdown = await response.text();
+                
+                // Parse frontmatter
+                const frontmatter = parseFrontmatter(markdown);
+                if (!frontmatter) {
+                    throw new Error('Invalid frontmatter');
+                }
+
+                // Remove frontmatter from content
+                const content = markdown.replace(/^---\n[\s\S]*?\n---\n/, '');
+                
+                // Update page title
+                document.title = `${frontmatter.title} - Carston Bethers`;
+                
+                // Update post metadata
+                document.getElementById('title').textContent = frontmatter.title;
+                document.getElementById('date').textContent = frontmatter.date;
+                document.getElementById('readingTime').textContent = `${calculateReadingTime(content)} min`;
+                
+                // Update tags
+                const tagsContainer = document.getElementById('tags');
+                frontmatter.tags.forEach(tag => {
+                    const tagElement = document.createElement('span');
+                    tagElement.className = 'post-tag';
+                    tagElement.textContent = `#${tag}`;
+                    tagsContainer.appendChild(tagElement);
+                });
+
+                // Configure marked.js
+                marked.setOptions({
+                    highlight: function(code, lang) {
+                        if (lang && hljs.getLanguage(lang)) {
+                            return hljs.highlight(code, { language: lang }).value;
+                        }
+                        return hljs.highlightAuto(code).value;
+                    },
+                    breaks: true,
+                    gfm: true
+                });
+
+                // Render content
+                document.getElementById('content').innerHTML = marked.parse(content);
+
+                // Initialize syntax highlighting
+                document.querySelectorAll('pre code').forEach((block) => {
+                    hljs.highlightBlock(block);
+                });
+            } catch (error) {
+                console.error('Error loading blog post:', error);
+                document.getElementById('content').innerHTML = '<p>Error loading blog post. Please try again later.</p>';
+            }
+        }
+
+        // Add scroll event listener for progress bar
+        window.addEventListener('scroll', updateProgressBar);
+        
+        // Load the blog post when the page loads
+        document.addEventListener('DOMContentLoaded', loadBlogPost);
+    </script>
+</body>
+</html> 

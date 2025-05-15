@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carston Bethers</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: black;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Courier New', Courier, monospace;
+        }
+
+        .name-container {
+            border: 2px solid white;
+            padding: 2rem 4rem;
+            cursor: default;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .name-container.ready {
+            background-color: white;
+            cursor: pointer;
+        }
+
+        .name-container.ready .name-text {
+            color: black;
+        }
+
+        .name-text {
+            color: white;
+            text-decoration: none;
+            font-size: 2rem;
+            letter-spacing: 2px;
+            pointer-events: none;
+        }
+
+        .progress-bar {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            height: 2px;
+            width: 0;
+            background-color: white;
+            transition: width 0.1s linear;
+        }
+
+        .name-container.ready .progress-bar {
+            background-color: black;
+            width: 100% !important;
+        }
+    </style>
+</head>
+<body>
+    <div id="container" class="name-container" onclick="handleClick()">
+        <div class="name-text">CARSTON BETHERS</div>
+        <div id="progress" class="progress-bar"></div>
+    </div>
+
+    <script>
+        let hoverTimer = null;
+        let isReady = false;
+        const container = document.getElementById('container');
+        const progress = document.getElementById('progress');
+        const HOVER_TIME = 5000; // 5 seconds in milliseconds
+
+        container.addEventListener('mouseenter', () => {
+            if (isReady) return;
+            
+            let startTime = Date.now();
+            hoverTimer = setInterval(() => {
+                const elapsed = Date.now() - startTime;
+                const percentage = (elapsed / HOVER_TIME) * 100;
+                
+                if (percentage >= 100) {
+                    clearInterval(hoverTimer);
+                    container.classList.add('ready');
+                    isReady = true;
+                } else {
+                    progress.style.width = `${percentage}%`;
+                }
+            }, 10);
+        });
+
+        container.addEventListener('mouseleave', () => {
+            if (isReady) return;
+            
+            clearInterval(hoverTimer);
+            progress.style.width = '0';
+        });
+
+        function handleClick() {
+            if (isReady) {
+                window.location.href = 'http://localhost:8000/home.html';
+            }
+        }
+    </script>
+</body>
+</html> 

@@ -30,7 +30,6 @@ class BlogHandler(http.server.SimpleHTTPRequestHandler):
                 
                 self.send_response(200)
                 self.send_header('Content-type', 'application/json')
-                self.send_header('Access-Control-Allow-Origin', '*')
                 self.end_headers()
                 self.wfile.write(json.dumps(posts).encode())
                 return
@@ -53,7 +52,6 @@ class BlogHandler(http.server.SimpleHTTPRequestHandler):
                 
                 self.send_response(200)
                 self.send_header('Content-type', 'text/markdown')
-                self.send_header('Access-Control-Allow-Origin', '*')
                 self.end_headers()
                 self.wfile.write(content.encode('utf-8'))
                 return
@@ -78,6 +76,17 @@ class BlogHandler(http.server.SimpleHTTPRequestHandler):
                 return
             
             print(f"Attempting to serve: {requested_path}")
+            
+            # Set content type for markdown files
+            if requested_path.endswith('.md'):
+                with open(requested_path, 'r', encoding='utf-8') as f:
+                    content = f.read()
+                self.send_response(200)
+                self.send_header('Content-type', 'text/markdown')
+                self.end_headers()
+                self.wfile.write(content.encode('utf-8'))
+                return
+            
             return http.server.SimpleHTTPRequestHandler.do_GET(self)
             
         except Exception as e:
@@ -89,7 +98,7 @@ class BlogHandler(http.server.SimpleHTTPRequestHandler):
         # Add CORS headers for all responses
         self.send_header('Access-Control-Allow-Origin', '*')
         self.send_header('Access-Control-Allow-Methods', 'GET, OPTIONS')
-        self.send_header('Access-Control-Allow-Headers', 'X-Requested-With')
+        self.send_header('Access-Control-Allow-Headers', '*')
         http.server.SimpleHTTPRequestHandler.end_headers(self)
 
 PORT = 8000

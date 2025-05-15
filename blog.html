@@ -407,7 +407,13 @@
                 const posts = await Promise.all(mdFiles.map(async filename => {
                     console.log('Fetching post:', filename);
                     try {
-                        const response = await fetch(`Blog_posts/${filename}`);
+                        // Check if we're on GitHub Pages
+                        const isGitHubPages = window.location.hostname.includes('github.io');
+                        const baseUrl = isGitHubPages 
+                            ? 'https://raw.githubusercontent.com/carst0/carstonbethers.github.io/main/Blog_posts/'
+                            : 'Blog_posts/';
+                        
+                        const response = await fetch(`${baseUrl}${filename}`);
                         if (!response.ok) {
                             console.error(`Failed to fetch ${filename}: ${response.status}`);
                             return null;

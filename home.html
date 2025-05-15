@@ -52,23 +52,36 @@
             background: #333;
             color: white;
             text-align: center;
+            font-size: 1em;
+            line-height: 1.5em;
         }
 
         .flip-letter .top,
         .flip-letter .flip-top {
-            line-height: 1.5em;
-            bottom: 0;
+            top: 0;
+            transform-origin: bottom;
+            border-top-left-radius: 3px;
+            border-top-right-radius: 3px;
         }
 
         .flip-letter .bottom,
         .flip-letter .flip-bottom {
-            line-height: 0;
-            top: 0;
+            bottom: 0;
+            transform-origin: top;
+            border-bottom-left-radius: 3px;
+            border-bottom-right-radius: 3px;
+        }
+
+        .flip-letter .top span,
+        .flip-letter .flip-top span {
+            display: block;
+            height: 200%;
         }
 
         .flip-letter .bottom span,
         .flip-letter .flip-bottom span {
             display: block;
+            height: 200%;
             margin-top: -0.75em;
         }
 
@@ -79,6 +92,38 @@
         .flip-letter.flipping .flip-bottom {
             transform: rotateX(0deg);
         }
+
+        /* Colorful theme - initially hidden */
+        .colorful .flip-letter {
+            background: linear-gradient(135deg, #1a1a1a 0%, #333 100%);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+        }
+
+        /* Colorful theme variations */
+        .colorful .flip-letter:nth-child(5n+1) .top,
+        .colorful .flip-letter:nth-child(5n+1) .flip-top { background: #FF6B6B; }
+        .colorful .flip-letter:nth-child(5n+1) .bottom,
+        .colorful .flip-letter:nth-child(5n+1) .flip-bottom { background: #FF5252; }
+
+        .colorful .flip-letter:nth-child(5n+2) .top,
+        .colorful .flip-letter:nth-child(5n+2) .flip-top { background: #4ECDC4; }
+        .colorful .flip-letter:nth-child(5n+2) .bottom,
+        .colorful .flip-letter:nth-child(5n+2) .flip-bottom { background: #45B7AF; }
+
+        .colorful .flip-letter:nth-child(5n+3) .top,
+        .colorful .flip-letter:nth-child(5n+3) .flip-top { background: #FFD93D; }
+        .colorful .flip-letter:nth-child(5n+3) .bottom,
+        .colorful .flip-letter:nth-child(5n+3) .flip-bottom { background: #FFC107; }
+
+        .colorful .flip-letter:nth-child(5n+4) .top,
+        .colorful .flip-letter:nth-child(5n+4) .flip-top { background: #6C5CE7; }
+        .colorful .flip-letter:nth-child(5n+4) .bottom,
+        .colorful .flip-letter:nth-child(5n+4) .flip-bottom { background: #5B4BC7; }
+
+        .colorful .flip-letter:nth-child(5n+5) .top,
+        .colorful .flip-letter:nth-child(5n+5) .flip-top { background: #A8E6CF; }
+        .colorful .flip-letter:nth-child(5n+5) .bottom,
+        .colorful .flip-letter:nth-child(5n+5) .flip-bottom { background: #95D6BE; }
 
         nav {
             margin-top: 3rem;
@@ -191,16 +236,26 @@
     <script>
         const phrases = [" CARSTON BETHERS ", "I LIKE CARS A TON!"];
         let currentPhraseIndex = 0;
+        let isColorful = false;
         
         function createFlipLetters(container, text) {
             container.innerHTML = '';
-            text.split('').forEach((char) => {
+            text.split('').forEach((char, index, array) => {
                 const letter = document.createElement('div');
                 letter.className = 'flip-letter';
                 
+                // Add click handler to the last character only
+                if (index === array.length - 1) {
+                    letter.onclick = function(e) {
+                        toggleTheme();
+                    };
+                }
+                
                 const top = document.createElement('div');
                 top.className = 'top';
-                top.textContent = char;
+                const topSpan = document.createElement('span');
+                topSpan.textContent = char;
+                top.appendChild(topSpan);
                 
                 const bottom = document.createElement('div');
                 bottom.className = 'bottom';
@@ -210,7 +265,9 @@
                 
                 const flipTop = document.createElement('div');
                 flipTop.className = 'flip-top';
-                flipTop.textContent = char;
+                const flipTopSpan = document.createElement('span');
+                flipTopSpan.textContent = char;
+                flipTop.appendChild(flipTopSpan);
                 
                 const flipBottom = document.createElement('div');
                 flipBottom.className = 'flip-bottom';
@@ -225,6 +282,11 @@
                 
                 container.appendChild(letter);
             });
+        }
+
+        function toggleTheme() {
+            isColorful = !isColorful;
+            document.getElementById('flipBoard').classList.toggle('colorful');
         }
 
         function updateText() {
@@ -249,9 +311,9 @@
                         
                         // Update the character after flip animation
                         setTimeout(() => {
-                            letter.querySelector('.top').textContent = nextChar;
+                            letter.querySelector('.top span').textContent = nextChar;
                             letter.querySelector('.bottom span').textContent = nextChar;
-                            letter.querySelector('.flip-top').textContent = nextChar;
+                            letter.querySelector('.flip-top span').textContent = nextChar;
                             letter.querySelector('.flip-bottom span').textContent = nextChar;
                             letter.classList.remove('flipping');
                         }, 300);

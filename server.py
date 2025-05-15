@@ -39,6 +39,29 @@ class BlogHandler(http.server.SimpleHTTPRequestHandler):
                 self.send_error(500, str(e))
                 return
 
+        # Handle blog post content requests
+        if decoded_path.startswith('/Blog_posts/') and decoded_path.endswith('.md'):
+            try:
+                file_path = os.path.join(os.getcwd(), decoded_path.lstrip('/'))
+                if not os.path.exists(file_path):
+                    print(f"Blog post not found: {file_path}")
+                    self.send_error(404, "Blog post not found")
+                    return
+                
+                with open(file_path, 'r', encoding='utf-8') as f:
+                    content = f.read()
+                
+                self.send_response(200)
+                self.send_header('Content-type', 'text/markdown')
+                self.send_header('Access-Control-Allow-Origin', '*')
+                self.end_headers()
+                self.wfile.write(content.encode('utf-8'))
+                return
+            except Exception as e:
+                print(f"Error serving blog post: {str(e)}")
+                self.send_error(500, str(e))
+                return
+
         # Handle direct file requests
         try:
             # Map the URL path to the local file system

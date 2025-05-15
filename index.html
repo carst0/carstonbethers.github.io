@@ -28,6 +28,7 @@
             perspective: 1000px;
         }
 
+        /* Original dark theme */
         .flip-letter {
             display: inline-block;
             position: relative;
@@ -38,6 +39,13 @@
             border-radius: 3px;
             perspective: 400px;
             overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        /* Colorful theme - initially hidden */
+        .colorful .flip-letter {
+            background: linear-gradient(135deg, #1a1a1a 0%, #333 100%);
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
 
         .flip-letter .top,
@@ -53,6 +61,32 @@
             text-align: center;
             line-height: 1.5em;
         }
+
+        /* Colorful theme variations */
+        .colorful .flip-letter:nth-child(5n+1) .top,
+        .colorful .flip-letter:nth-child(5n+1) .flip-top { background: #FF6B6B; }
+        .colorful .flip-letter:nth-child(5n+1) .bottom,
+        .colorful .flip-letter:nth-child(5n+1) .flip-bottom { background: #FF5252; }
+
+        .colorful .flip-letter:nth-child(5n+2) .top,
+        .colorful .flip-letter:nth-child(5n+2) .flip-top { background: #4ECDC4; }
+        .colorful .flip-letter:nth-child(5n+2) .bottom,
+        .colorful .flip-letter:nth-child(5n+2) .flip-bottom { background: #45B7AF; }
+
+        .colorful .flip-letter:nth-child(5n+3) .top,
+        .colorful .flip-letter:nth-child(5n+3) .flip-top { background: #FFD93D; }
+        .colorful .flip-letter:nth-child(5n+3) .bottom,
+        .colorful .flip-letter:nth-child(5n+3) .flip-bottom { background: #FFC107; }
+
+        .colorful .flip-letter:nth-child(5n+4) .top,
+        .colorful .flip-letter:nth-child(5n+4) .flip-top { background: #6C5CE7; }
+        .colorful .flip-letter:nth-child(5n+4) .bottom,
+        .colorful .flip-letter:nth-child(5n+4) .flip-bottom { background: #5B4BC7; }
+
+        .colorful .flip-letter:nth-child(5n+5) .top,
+        .colorful .flip-letter:nth-child(5n+5) .flip-top { background: #A8E6CF; }
+        .colorful .flip-letter:nth-child(5n+5) .bottom,
+        .colorful .flip-letter:nth-child(5n+5) .flip-bottom { background: #95D6BE; }
 
         .flip-letter .top {
             background: #444;
@@ -96,15 +130,35 @@
         .flip-letter.flipping .flip-bottom {
             transform: rotateX(0deg);
         }
+
+        /* Theme toggle button */
+        .theme-toggle {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background: #333;
+            border: none;
+            color: white;
+            border-radius: 5px;
+            cursor: pointer;
+            font-family: inherit;
+            transition: all 0.3s ease;
+        }
+
+        .theme-toggle:hover {
+            background: #444;
+        }
     </style>
 </head>
 <body>
-    <div class="flip-board" id="flipBoard" onclick="handleClick()"></div>
+    <div class="flip-board" id="flipBoard"></div>
+    <button class="theme-toggle" onclick="toggleTheme()">Toggle Colors</button>
 
     <script>
-        const phrases = ["CARSTON BETHERS", "I LIKE CARS A TON"];
+        const phrases = [" CARSTON BETHERS ", "I LIKE CARS A TON!"]; // Added spaces for centering first phrase
         let currentPhraseIndex = 0;
-        let isReady = false;
+        let isColorful = false;
         
         function createFlipLetters(container, text) {
             container.innerHTML = '';
@@ -170,6 +224,12 @@
             }
             
             currentPhraseIndex = (currentPhraseIndex + 1) % phrases.length;
+        }
+
+        function toggleTheme() {
+            const board = document.getElementById('flipBoard');
+            isColorful = !isColorful;
+            board.classList.toggle('colorful');
         }
 
         function handleClick() {

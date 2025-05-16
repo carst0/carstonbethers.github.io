@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carston Bethers - Projects</title>
+    <link rel="icon" type="image/svg+xml" href="favicon.svg">
+    <link rel="icon" type="image/png" href="favicon.png">
+    <style>
+        :root {
+            --bg-color: #000000;
+            --text-color: #ffffff;
+            --accent-color: #666666;
+            --hover-color: #888888;
+            --border-color: #333333;
+            --section-spacing: 4rem;
+        }
+
+        body {
+            margin: 0;
+            padding: 2rem;
+            background-color: var(--bg-color);
+            min-height: 100vh;
+            font-family: 'Courier New', Courier, monospace;
+            color: var(--text-color);
+        }
+
+        header {
+            margin-bottom: var(--section-spacing);
+        }
+
+        h1, h2 {
+            letter-spacing: 2px;
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 2rem;
+        }
+
+        h2 {
+            font-size: 1.5rem;
+            color: var(--accent-color);
+            margin-bottom: 1.5rem;
+        }
+
+        .back-link {
+            color: var(--accent-color);
+            text-decoration: none;
+            font-size: 1rem;
+            margin-bottom: 2rem;
+            display: inline-block;
+            transition: color 0.3s ease;
+        }
+
+        .back-link:hover {
+            color: var(--text-color);
+        }
+
+        .back-link::before {
+            content: "< ";
+            color: var(--accent-color);
+        }
+
+        .project-section {
+            margin-bottom: var(--section-spacing);
+        }
+
+        .project-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 2rem;
+        }
+
+        .project-card {
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            min-height: 150px;
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .project-card:hover {
+            border-color: var(--text-color);
+            transform: translateY(-5px);
+        }
+
+        .project-title {
+            font-size: 1.4rem;
+            margin: 0;
+            letter-spacing: 1px;
+        }
+
+        .project-description {
+            margin: 0;
+            font-size: 0.95rem;
+            color: var(--accent-color);
+            flex-grow: 1;
+        }
+
+        .project-meta {
+            font-size: 0.9rem;
+            color: var(--accent-color);
+            display: flex;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .project-tech {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        .tech-tag {
+            font-size: 0.8rem;
+            color: var(--accent-color);
+        }
+
+        @media (max-width: 600px) {
+            .project-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <a href="home.html" class="back-link">Back to Home</a>
+        <h1>PROJECTS</h1>
+    </header>
+
+    <section class="project-section" id="future-projects">
+        <h2>FUTURE PROJECTS</h2>
+        <div class="project-grid">
+            <div class="project-card">
+                <h3 class="project-title">Scale'd Ingredients Mobile App</h3>
+                <p class="project-description">A mobile application that extends the Scale'd Ingredients platform, allowing users to scale recipes and manage their cooking projects on the go with offline support.</p>
+                <div class="project-meta">
+                    <div class="project-tech">
+                        <span class="tech-tag">#React Native</span>
+                        <span class="tech-tag">#Mobile</span>
+                        <span class="tech-tag">#JavaScript</span>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card">
+                <h3 class="project-title">Recipe Recommendation Engine</h3>
+                <p class="project-description">An AI-powered system that suggests recipes based on available ingredients, dietary preferences, and past cooking history.</p>
+                <div class="project-meta">
+                    <div class="project-tech">
+                        <span class="tech-tag">#Python</span>
+                        <span class="tech-tag">#ML</span>
+                        <span class="tech-tag">#FastAPI</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section" id="present-projects">
+        <h2>PRESENT PROJECTS</h2>
+        <div class="project-grid">
+            <div class="project-card">
+                <h3 class="project-title">Scale'd Ingredients</h3>
+                <p class="project-description">A web platform for scaling cooking recipes while maintaining proper ratios and measurements. Features include ingredient substitution suggestions and metric/imperial conversion.</p>
+                <div class="project-meta">
+                    <div class="project-tech">
+                        <span class="tech-tag">#Python</span>
+                        <span class="tech-tag">#Flask</span>
+                        <span class="tech-tag">#React</span>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card">
+                <h3 class="project-title">Personal Blog & Portfolio</h3>
+                <p class="project-description">A custom-built personal website featuring a responsive design, dynamic blog post loading from markdown files, and an interactive project showcase.</p>
+                <div class="project-meta">
+                    <div class="project-tech">
+                        <span class="tech-tag">#HTML</span>
+                        <span class="tech-tag">#CSS</span>
+                        <span class="tech-tag">#JavaScript</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="project-section" id="past-projects">
+        <h2>PAST PROJECTS</h2>
+        <div class="project-grid">
+            <div class="project-card">
+                <h3 class="project-title">Recipe Parser</h3>
+                <p class="project-description">A Python library for extracting structured data from unformatted recipe text, supporting multiple formats and handling edge cases in measurement notation.</p>
+                <div class="project-meta">
+                    <div class="project-tech">
+                        <span class="tech-tag">#Python</span>
+                        <span class="tech-tag">#NLP</span>
+                        <span class="tech-tag">#RegEx</span>
+                    </div>
+                </div>
+            </div>
+            <div class="project-card">
+                <h3 class="project-title">Cooking Unit Converter</h3>
+                <p class="project-description">A command-line tool for converting between different cooking measurements and scaling recipes, with support for both metric and imperial units.</p>
+                <div class="project-meta">
+                    <div class="project-tech">
+                        <span class="tech-tag">#Python</span>
+                        <span class="tech-tag">#CLI</span>
+                        <span class="tech-tag">#UnitConversion</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Add click handler to project cards
+        document.querySelectorAll('.project-card').forEach(card => {
+            card.addEventListener('click', () => {
+                // You can add navigation to detailed project pages here
+                console.log('Clicked project:', card.querySelector('.project-title').textContent);
+            });
+        });
+    </script>
+</body>
+</html> 

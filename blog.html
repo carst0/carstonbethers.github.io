@@ -407,15 +407,16 @@
                 const posts = await Promise.all(mdFiles.map(async filename => {
                     console.log('Fetching post:', filename);
                     try {
-                        // Check if we're on GitHub Pages
-                        const isGitHubPages = window.location.hostname.includes('github.io');
-                        console.log('Is GitHub Pages?', isGitHubPages);
+                        // Check if we're on GitHub Pages or custom domain
+                        const isProduction = window.location.hostname.includes('github.io') || 
+                                          window.location.hostname.includes('carstonbethers.com');
+                        console.log('Is Production?', isProduction, 'Hostname:', window.location.hostname);
                         
                         let baseUrl;
-                        if (isGitHubPages) {
-                            // Use raw.githubusercontent.com for GitHub Pages
-                            baseUrl = 'https://raw.githubusercontent.com/carst0/carstonbethers.github.io/main/Blog_posts/';
-                            console.log('Using GitHub raw URL:', baseUrl);
+                        if (isProduction) {
+                            // Use relative path for production (both GitHub Pages and custom domain)
+                            baseUrl = '/Blog_posts/';
+                            console.log('Using production path:', baseUrl);
                         } else {
                             // Use relative path for local development
                             baseUrl = 'Blog_posts/';

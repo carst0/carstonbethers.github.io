@@ -414,9 +414,9 @@
                         
                         let baseUrl;
                         if (isProduction) {
-                            // Use relative path for production (both GitHub Pages and custom domain)
-                            baseUrl = '/Blog_posts/';
-                            console.log('Using production path:', baseUrl);
+                            // Use raw GitHub URL for production (both GitHub Pages and custom domain)
+                            baseUrl = 'https://raw.githubusercontent.com/carst0/carstonbethers.github.io/main/Blog_posts/';
+                            console.log('Using GitHub raw URL:', baseUrl);
                         } else {
                             // Use relative path for local development
                             baseUrl = 'Blog_posts/';
@@ -426,7 +426,11 @@
                         const fullUrl = `${baseUrl}${filename}`;
                         console.log('Attempting to fetch from:', fullUrl);
                         
-                        const response = await fetch(fullUrl);
+                        const response = await fetch(fullUrl, {
+                            headers: {
+                                'Accept': 'text/plain, text/markdown'
+                            }
+                        });
                         if (!response.ok) {
                             console.error(`Failed to fetch ${filename}: ${response.status}`);
                             console.error('Full URL that failed:', fullUrl);
@@ -451,42 +455,24 @@
                             reading_time: frontmatter.reading_time || calculateReadingTime(content)
                         };
                     } catch (error) {
-                        console.error(`Error processing ${filename}:`, error);
-                        console.error('Stack trace:', error.stack);
+                        console.error(`Error fetching ${filename}:`, error);
                         return null;
                     }
                 }));
 
-                allPosts = posts.filter(post => post !== null)
-                    .sort((a, b) => new Date(b.date) - new Date(a.date));
+                allPosts = posts.filter(post => post !== null);
+                console.log('Fetched blog posts:', allPosts);
 
-                console.log('Processed posts:', allPosts);
-                
-                if (allPosts.length === 0) {
-                    throw new Error('No valid blog posts found');
-                }
-
-                updateTagFilters(allPosts);
                 updateDisplayedPosts();
+                updateTagFilters(allPosts);
             } catch (error) {
                 console.error('Error loading blog posts:', error);
-                console.error('Stack trace:', error.stack);
-                blogGrid.innerHTML = `
-                    <div style="color: var(--text-color); padding: 2rem;">
-                        <h2>Error Loading Blog Posts</h2>
-                        <p>Unable to load blog posts. Please try again later.</p>
-                        <p>Error details: ${error.message}</p>
-                        <p>Check the browser console for more details.</p>
-                    </div>
-                `;
+                blogGrid.innerHTML = '<p>Error loading blog posts. Please try again later.</p>';
             }
         }
 
-        // Add search input handler
-        document.getElementById('searchInput').addEventListener('input', updateDisplayedPosts);
-
-        // Load posts when the page loads
-        document.addEventListener('DOMContentLoaded', loadBlogPosts);
+        // Initialize blog posts
+        loadBlogPosts();
     </script>
 </body>
-</html> 
+</html>

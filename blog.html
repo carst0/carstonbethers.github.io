@@ -409,13 +409,26 @@
                     try {
                         // Check if we're on GitHub Pages
                         const isGitHubPages = window.location.hostname.includes('github.io');
-                        const baseUrl = isGitHubPages 
-                            ? 'https://raw.githubusercontent.com/carst0/carstonbethers.github.io/main/Blog_posts/'
-                            : 'Blog_posts/';
+                        console.log('Is GitHub Pages?', isGitHubPages);
                         
-                        const response = await fetch(`${baseUrl}${filename}`);
+                        let baseUrl;
+                        if (isGitHubPages) {
+                            // Use raw.githubusercontent.com for GitHub Pages
+                            baseUrl = 'https://raw.githubusercontent.com/carst0/carstonbethers.github.io/main/Blog_posts/';
+                            console.log('Using GitHub raw URL:', baseUrl);
+                        } else {
+                            // Use relative path for local development
+                            baseUrl = 'Blog_posts/';
+                            console.log('Using local path:', baseUrl);
+                        }
+                        
+                        const fullUrl = `${baseUrl}${filename}`;
+                        console.log('Attempting to fetch from:', fullUrl);
+                        
+                        const response = await fetch(fullUrl);
                         if (!response.ok) {
                             console.error(`Failed to fetch ${filename}: ${response.status}`);
+                            console.error('Full URL that failed:', fullUrl);
                             return null;
                         }
                         
@@ -438,6 +451,7 @@
                         };
                     } catch (error) {
                         console.error(`Error processing ${filename}:`, error);
+                        console.error('Stack trace:', error.stack);
                         return null;
                     }
                 }));
@@ -455,11 +469,13 @@
                 updateDisplayedPosts();
             } catch (error) {
                 console.error('Error loading blog posts:', error);
+                console.error('Stack trace:', error.stack);
                 blogGrid.innerHTML = `
                     <div style="color: var(--text-color); padding: 2rem;">
                         <h2>Error Loading Blog Posts</h2>
                         <p>Unable to load blog posts. Please try again later.</p>
                         <p>Error details: ${error.message}</p>
+                        <p>Check the browser console for more details.</p>
                     </div>
                 `;
             }

@@ -1,0 +1,207 @@
+body {
+    margin: 0;
+    padding: 2rem;
+    background-color: black;
+    min-height: 100vh;
+    font-family: 'Courier New', Courier, monospace;
+    color: white;
+    overflow-x: hidden;
+}
+
+header {
+    margin-bottom: 4rem;
+    perspective: 1000px;
+}
+
+.flip-board {
+    font-size: 2rem;
+    letter-spacing: 2px;
+    margin-bottom: 0.5rem;
+    display: inline-block;
+}
+
+.flip-letter {
+    display: inline-block;
+    position: relative;
+    margin: 0 2px;
+    width: 1.2em;
+    height: 1.5em;
+    background: #333;
+    border-radius: 3px;
+    perspective: 400px;
+    overflow: hidden;
+}
+
+.flip-letter .top,
+.flip-letter .bottom,
+.flip-letter .flip-top,
+.flip-letter .flip-bottom {
+    position: absolute;
+    width: 100%;
+    height: 50%;
+    overflow: hidden;
+    background: #333;
+    color: white;
+    text-align: center;
+    font-size: 1em;
+    line-height: 1.5em;
+}
+
+.flip-letter .top,
+.flip-letter .flip-top {
+    top: 0;
+    transform-origin: bottom;
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+}
+
+.flip-letter .bottom,
+.flip-letter .flip-bottom {
+    bottom: 0;
+    transform-origin: top;
+    border-bottom-left-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+
+.flip-letter .top span,
+.flip-letter .flip-top span {
+    display: block;
+    height: 200%;
+}
+
+.flip-letter .bottom span,
+.flip-letter .flip-bottom span {
+    display: block;
+    height: 200%;
+    margin-top: -0.75em;
+}
+
+.flip-letter.flipping .flip-top {
+    transform: rotateX(-180deg);
+}
+
+.flip-letter.flipping .flip-bottom {
+    transform: rotateX(0deg);
+}
+
+/* Colorful theme - initially hidden */
+.colorful .flip-letter {
+    background: linear-gradient(135deg, #1a1a1a 0%, #333 100%);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+}
+
+/* Colorful theme variations */
+.colorful .flip-letter:nth-child(5n+1) .top,
+.colorful .flip-letter:nth-child(5n+1) .flip-top { background: #FF6B6B; }
+.colorful .flip-letter:nth-child(5n+1) .bottom,
+.colorful .flip-letter:nth-child(5n+1) .flip-bottom { background: #FF5252; }
+
+.colorful .flip-letter:nth-child(5n+2) .top,
+.colorful .flip-letter:nth-child(5n+2) .flip-top { background: #4ECDC4; }
+.colorful .flip-letter:nth-child(5n+2) .bottom,
+.colorful .flip-letter:nth-child(5n+2) .flip-bottom { background: #45B7AF; }
+
+.colorful .flip-letter:nth-child(5n+3) .top,
+.colorful .flip-letter:nth-child(5n+3) .flip-top { background: #FFD93D; }
+.colorful .flip-letter:nth-child(5n+3) .bottom,
+.colorful .flip-letter:nth-child(5n+3) .flip-bottom { background: #FFC107; }
+
+.colorful .flip-letter:nth-child(5n+4) .top,
+.colorful .flip-letter:nth-child(5n+4) .flip-top { background: #6C5CE7; }
+.colorful .flip-letter:nth-child(5n+4) .bottom,
+.colorful .flip-letter:nth-child(5n+4) .flip-bottom { background: #5B4BC7; }
+
+.colorful .flip-letter:nth-child(5n+5) .top,
+.colorful .flip-letter:nth-child(5n+5) .flip-top { background: #A8E6CF; }
+.colorful .flip-letter:nth-child(5n+5) .bottom,
+.colorful .flip-letter:nth-child(5n+5) .flip-bottom { background: #95D6BE; }
+
+nav {
+    margin-top: 3rem;
+}
+
+.menu-item {
+    display: block;
+    margin: 1rem 0;
+    color: white;
+    text-decoration: none;
+    font-size: 1.2rem;
+    transition: all 0.3s ease;
+}
+
+.menu-item:hover {
+    color: #666;
+    padding-left: 1rem;
+}
+
+.menu-item::before {
+    content: "> ";
+    color: #666;
+}
+
+.snoopy-container {
+    position: fixed;
+    bottom: 20%;
+    display: flex;
+    align-items: center;
+    transform: translateX(-100%);
+    opacity: 0;
+    pointer-events: none;
+}
+
+.snoopy-container.running {
+    animation: runAcross 4s linear forwards;
+}
+
+.snoopy {
+    width: 60px;
+    height: 60px;
+    background: white;
+    mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M30,70 Q35,60 40,70 Q45,60 50,70 L60,70 Q65,60 70,70 L75,65 Q80,60 80,65 L80,75 L20,75 L20,65 Q20,60 25,65 L30,70" /><circle cx="60" cy="40" r="20" /><circle cx="65" cy="35" r="5" fill="black" /><path d="M45,45 Q60,55 75,45" fill="none" stroke="black" stroke-width="2" /></svg>') center/contain;
+    -webkit-mask: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M30,70 Q35,60 40,70 Q45,60 50,70 L60,70 Q65,60 70,70 L75,65 Q80,60 80,65 L80,75 L20,75 L20,65 Q20,60 25,65 L30,70" /><circle cx="60" cy="40" r="20" /><circle cx="65" cy="35" r="5" fill="black" /><path d="M45,45 Q60,55 75,45" fill="none" stroke="black" stroke-width="2" /></svg>') center/contain;
+    animation: bounce 0.5s infinite alternate;
+}
+
+.speech-bubble {
+    background: white;
+    color: black;
+    padding: 10px 15px;
+    border-radius: 20px;
+    margin-left: 15px;
+    font-size: 0.9rem;
+    position: relative;
+}
+
+.speech-bubble::before {
+    content: '';
+    position: absolute;
+    left: -10px;
+    top: 50%;
+    transform: translateY(-50%);
+    border-right: 10px solid white;
+    border-top: 10px solid transparent;
+    border-bottom: 10px solid transparent;
+}
+
+@keyframes runAcross {
+    0% {
+        transform: translateX(-100%);
+        opacity: 1;
+    }
+    80% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(100vw);
+        opacity: 0;
+    }
+}
+
+@keyframes bounce {
+    from {
+        transform: translateY(0);
+    }
+    to {
+        transform: translateY(-10px);
+    }
+} 

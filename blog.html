@@ -308,6 +308,15 @@
             return text.slice(0, length) + (text.length > length ? '...' : '');
         }
 
+        // Function to sort posts by date (most recent first)
+        function sortPostsByDate(posts) {
+            return posts.sort((a, b) => {
+                const dateA = new Date(a.date);
+                const dateB = new Date(b.date);
+                return dateB - dateA; // Most recent first
+            });
+        }
+
         // Global variables to store posts and active filters
         let allPosts = [];
         let activeTags = new Set();
@@ -462,6 +471,10 @@
 
                 allPosts = posts.filter(post => post !== null);
                 console.log('Fetched blog posts:', allPosts);
+
+                // Sort posts by date (most recent first)
+                allPosts = sortPostsByDate(allPosts);
+                console.log('Sorted blog posts by date:', allPosts);
 
                 updateDisplayedPosts();
                 updateTagFilters(allPosts);

@@ -1,3 +1,11 @@
+---
+title: Political Pen of Gyges
+date: 2024-12-30
+preview: Who is evil, Republicans or Democrats? A philosophical exploration of political power and the need for checks and balances.
+reading_time: 5
+tags: [politics, philosophy, power, government, checks-and-balances]
+---
+
 Who is evil, Republicans or Democrats?
 
 Typically, it’s Republicans when they are in power, and Democrats when they are in power.

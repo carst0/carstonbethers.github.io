@@ -1,6 +1,6 @@
 ---
 title: Corrective Glasses
-date: 2025-02-01
+date: 2026-02-23
 preview: A reflection on a founding role offer, moral tradeoffs, and trusting the process—like wearing corrective glasses on the path to better vision.
 reading_time: 3
 tags: [personal, startups, faith, decision-making, ethics]
